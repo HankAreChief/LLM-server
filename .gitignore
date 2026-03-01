@@ -1,0 +1,18 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# Environment — copy .env.example and fill in locally
+.env
+
+# Logs (keep directory, not content)
+logs/*
+!logs/.gitkeep
+
+# Model cache (downloaded separately, never commit weights)
+models/
+
+# macOS
+.DS_Store
