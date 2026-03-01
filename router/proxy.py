@@ -155,8 +155,12 @@ async def chat_completions(request: Request):
             },
         )
 
-    port = FLEET[alias]["port"]
+    cfg = FLEET[alias]
+    port = cfg["port"]
     url = f"http://127.0.0.1:{port}/v1/chat/completions"
+
+    # Replace alias with the HF repo ID that mlx_lm.server expects
+    body = {**body, "model": cfg["hf_repo"]}
 
     is_streaming = body.get("stream", False)
 
