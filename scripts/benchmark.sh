@@ -21,13 +21,18 @@ curl -sf "http://localhost:$PORT/v1/models" > /dev/null 2>&1 || {
     exit 1
 }
 
-# Get current model
-CURRENT_MODEL=$(curl -sf "http://localhost:$PORT/v1/models" | python3 -c "
+# Get current model (from start-server.sh record, not API which lists all cached models)
+CURRENT_MODEL_FILE="$LOG_DIR/current-model.txt"
+if [ -f "$CURRENT_MODEL_FILE" ]; then
+    CURRENT_MODEL=$(cat "$CURRENT_MODEL_FILE")
+else
+    CURRENT_MODEL=$(curl -sf "http://localhost:$PORT/v1/models" | python3 -c "
 import json, sys
 d = json.load(sys.stdin)
 models = d.get('data', [])
 print(models[0]['id'] if models else 'unknown')
 ")
+fi
 
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 SAFE_MODEL="${CURRENT_MODEL//\//_}"

@@ -106,6 +106,7 @@ HF_HOME="$HF_HOME" nohup python3 -m mlx_lm.server \
 
 SERVER_PID=$!
 echo "$SERVER_PID" > "$PID_FILE"
+echo "$MODEL_REPO" > "$LOG_DIR/current-model.txt"
 
 # Keep a symlink to the current log for easy tailing
 ln -sf "$LOG_FILE" "$LOG_DIR/server-current.log"

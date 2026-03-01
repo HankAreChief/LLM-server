@@ -16,15 +16,16 @@ RESPONSE=$(curl -sf --max-time 5 "$ENDPOINT" 2>/dev/null) || {
 echo "✓ Server is healthy at $ENDPOINT"
 echo ""
 
-echo "$RESPONSE" | python3 -c "
+CURRENT_MODEL_FILE="$PROJECT_DIR/logs/current-model.txt"
+if [ -f "$CURRENT_MODEL_FILE" ]; then
+    echo "Active model: $(cat "$CURRENT_MODEL_FILE")"
+else
+    echo "$RESPONSE" | python3 -c "
 import json, sys
 data = json.load(sys.stdin)
 models = data.get('data', [])
 if models:
-    print('Loaded model(s):')
-    for m in models:
-        print(f'  - {m[\"id\"]}')
-else:
-    print('No models reported')
+    print(f'Active model: {models[0][\"id\"]} (reported by API)')
 "
+fi
 exit 0
